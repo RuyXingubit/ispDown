@@ -36,35 +36,40 @@ docker-compose up --build
 - Frontend: `http://localhost:80`
 - Backend API: `http://localhost:8080`
 
-## Instalação em Produção (VPS via DockerHub)
+## Instalação em Produção (Para o Provedor)
 
-Para servidores de produção, não é necessário clonar todo o código fonte e nem usar ferramentas de compilação. Usamos as imagens prontas e super leves armazenadas no nosso DockerHub (`xingubit/ispdown-backend` e `xingubit/ispdown-frontend`).
+Se você é um provedor, não precisa compilar código nem entender de programação. Preparamos uma instalação com **3 passos simples** que roda o sistema com HTTPS (SSL Automático) usando Docker.
 
-1. **Crie a pasta de Uploads (Obrigatório):**
-   Crie uma pasta no seu disco secundário com grande espaço (ex: `/var/isp-transfer/uploads`). É nela que os arquivos de 20GB dos clientes serão salvos sem estourar o disco principal do sistema operacional.
+1. **Crie a pasta para os arquivos gigantes:**
+   É obrigatório ter uma pasta (preferencialmente num HD secundário de grande capacidade) para receber os arquivos dos clientes.
    ```bash
    sudo mkdir -p /var/isp-transfer/uploads
    sudo chmod 777 /var/isp-transfer/uploads
    ```
 
-2. **Baixe apenas o arquivo de Compose de Produção:**
+2. **Baixe as configurações prontas:**
+   Faça o download dos arquivos vitais de infraestrutura para a sua VPS.
    ```bash
-   curl -O https://raw.githubusercontent.com/RuyXingubit/ispDown/main/docker-compose.prod.yml
+   mkdir ispdown && cd ispdown
+   curl -o docker-compose.yml https://raw.githubusercontent.com/RuyXingubit/ispDown/main/docker-compose.prod.yml
+   curl -o .env https://raw.githubusercontent.com/RuyXingubit/ispDown/main/.env.example
    ```
 
-3. **Configure o `.env` no mesmo diretório:**
+3. **Configure o seu domínio e senhas:**
+   Edite o arquivo `.env` para colocar o seu domínio real. O sistema usará isso para gerar o "Cadeadinho Verde" (SSL/HTTPS) de graça.
    ```bash
    nano .env
-   # Insira suas senhas de banco de dados e JWT
+   # Troque a variável DOMAIN para algo como: DOMAIN=envio.seunet.com.br
+   # Troque a senha do banco de dados e o JWT_SECRET
    ```
 
-4. **Inicie os serviços:**
+4. **Ligue o Motor!**
+   Agora é só rodar o Docker para ele baixar tudo e colocar o site no ar:
    ```bash
-   docker-compose -f docker-compose.prod.yml pull
-   docker-compose -f docker-compose.prod.yml up -d
+   docker-compose pull
+   docker-compose up -d
    ```
-
-> Para detalhes avançados de como montar fisicamente um HD Secundário no Linux e conectá-lo na pasta, veja o guia detalhado [docs/MANUAL.md](./docs/MANUAL.md).
+   Acesse no navegador: `https://seu-dominio-configurado.com.br`!
 
 ## Contribuindo
 Este projeto é open-source. Sinta-se livre para abrir *Issues* ou enviar *Pull Requests*. Lembre-se de seguir o padrão de **Conventional Commits** (ex: `feat: x`, `fix: y`) pois utilizamos o Semantic Release para versionamento automático.

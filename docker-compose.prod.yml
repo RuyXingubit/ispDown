@@ -15,15 +15,13 @@ services:
   backend:
     image: xingubit/ispdown-backend:latest
     container_name: ispdown-backend
-    ports:
-      - "8080:8080"
     environment:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=isp_user
       - DB_PASSWORD=isp_password
       - DB_NAME=ispdown
-      - JWT_SECRET=sua_chave_secreta_super_segura_aqui
+      - JWT_SECRET=${JWT_SECRET}
       - UPLOAD_DIR=/app/uploads
     volumes:
       - /var/isp-transfer/uploads:/app/uploads
@@ -34,11 +32,28 @@ services:
   frontend:
     image: xingubit/ispdown-frontend:latest
     container_name: ispdown-frontend
-    ports:
-      - "80:80"
     depends_on:
       - backend
     restart: always
 
+  caddy:
+    image: caddy:2-alpine
+    container_name: ispdown-caddy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN}
+    command: sh -c 'echo "$$DOMAIN { reverse_proxy /api/* backend:8080; reverse_proxy * frontend:80 }" > /etc/caddy/Caddyfile && caddy run --config /etc/caddy/Caddyfile'
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+      - backend
+
 volumes:
   db_data:
+  caddy_data:
+  caddy_config:
