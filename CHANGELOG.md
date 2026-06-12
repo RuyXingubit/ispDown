@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/RuyXingubit/ispDown/compare/v1.1.1...v1.1.2) (2026-06-12)
+
+
+### Bug Fixes
+
+* atualiza nome do modulo no go.mod para ispdown ([c93f405](https://github.com/RuyXingubit/ispDown/commit/c93f405427a69b8a31a19fe4e5dc442acca34c28))
+
 ## [1.1.1](https://github.com/RuyXingubit/ispDown/compare/v1.1.0...v1.1.1) (2026-06-12)
 
 
