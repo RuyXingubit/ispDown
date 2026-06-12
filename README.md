@@ -36,8 +36,35 @@ docker-compose up --build
 - Frontend: `http://localhost:80`
 - Backend API: `http://localhost:8080`
 
-## Instalação em Produção (VPS)
-Veja o arquivo [docs/MANUAL.md](./docs/MANUAL.md) para instruções detalhadas de como montar um disco secundário seguro na VPS e usar o `docker-compose.prod.yml` que puxa a imagem levíssima do DockerHub.
+## Instalação em Produção (VPS via DockerHub)
+
+Para servidores de produção, não é necessário clonar todo o código fonte e nem usar ferramentas de compilação. Usamos as imagens prontas e super leves armazenadas no nosso DockerHub (`xingubit/ispdown-backend` e `xingubit/ispdown-frontend`).
+
+1. **Crie a pasta de Uploads (Obrigatório):**
+   Crie uma pasta no seu disco secundário com grande espaço (ex: `/var/isp-transfer/uploads`). É nela que os arquivos de 20GB dos clientes serão salvos sem estourar o disco principal do sistema operacional.
+   ```bash
+   sudo mkdir -p /var/isp-transfer/uploads
+   sudo chmod 777 /var/isp-transfer/uploads
+   ```
+
+2. **Baixe apenas o arquivo de Compose de Produção:**
+   ```bash
+   curl -O https://raw.githubusercontent.com/RuyXingubit/ispDown/main/docker-compose.prod.yml
+   ```
+
+3. **Configure o `.env` no mesmo diretório:**
+   ```bash
+   nano .env
+   # Insira suas senhas de banco de dados e JWT
+   ```
+
+4. **Inicie os serviços:**
+   ```bash
+   docker-compose -f docker-compose.prod.yml pull
+   docker-compose -f docker-compose.prod.yml up -d
+   ```
+
+> Para detalhes avançados de como montar fisicamente um HD Secundário no Linux e conectá-lo na pasta, veja o guia detalhado [docs/MANUAL.md](./docs/MANUAL.md).
 
 ## Contribuindo
 Este projeto é open-source. Sinta-se livre para abrir *Issues* ou enviar *Pull Requests*. Lembre-se de seguir o padrão de **Conventional Commits** (ex: `feat: x`, `fix: y`) pois utilizamos o Semantic Release para versionamento automático.
