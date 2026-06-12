@@ -1,4 +1,4 @@
-# ISP Transfer 🚀
+# ispDown 🚀
 
 Um serviço de transferência de arquivos gigantes (até 20GB) focado em Provedores de Internet (ISPs) e seus clientes. Desenvolvido para ter máxima performance e ocupar a mínima quantidade de RAM na sua VPS através de processamento em *Chunks* (Pedaços).
 

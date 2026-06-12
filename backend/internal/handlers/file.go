@@ -8,8 +8,8 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/ruyxingubit/isptransfer/internal/config"
-	"github.com/ruyxingubit/isptransfer/internal/models"
+	"github.com/ruyxingubit/ispdown/internal/config"
+	"github.com/ruyxingubit/ispdown/internal/models"
 )
 
 // --- FILE HANDLERS ---

@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/ruyxingubit/isptransfer/internal/handlers"
+	"github.com/ruyxingubit/ispdown/internal/handlers"
 )
 
 func SetupRoutes(app *fiber.App) {

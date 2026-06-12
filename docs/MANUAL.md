@@ -1,6 +1,6 @@
 # Manual de Instalação e Deploy na VPS
 
-Este guia explica como configurar a infraestrutura necessária na sua VPS (Ubuntu/Debian) para rodar o **ISP Transfer**.
+Este guia explica como configurar a infraestrutura necessária na sua VPS (Ubuntu/Debian) para rodar o **ispDown**.
 
 ## 1. Montando o Segundo Disco para Uploads
 

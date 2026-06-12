@@ -6,8 +6,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/ruyxingubit/isptransfer/internal/config"
-	"github.com/ruyxingubit/isptransfer/internal/models"
+	"github.com/ruyxingubit/ispdown/internal/config"
+	"github.com/ruyxingubit/ispdown/internal/models"
 )
 
 // Inicia o loop infinito que roda a cada 10 minutos

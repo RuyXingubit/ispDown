@@ -3,18 +3,18 @@ version: '3.8'
 services:
   db:
     image: postgres:15-alpine
-    container_name: isptransfer-db
+    container_name: ispdown-db
     environment:
       POSTGRES_USER: isp_user
       POSTGRES_PASSWORD: isp_password
-      POSTGRES_DB: isptransfer
+      POSTGRES_DB: ispdown
     volumes:
       - db_data:/var/lib/postgresql/data
     restart: always
 
   backend:
-    image: xingubit/isptransfer-backend:latest
-    container_name: isptransfer-backend
+    image: xingubit/ispdown-backend:latest
+    container_name: ispdown-backend
     ports:
       - "8080:8080"
     environment:
@@ -22,7 +22,7 @@ services:
       - DB_PORT=5432
       - DB_USER=isp_user
       - DB_PASSWORD=isp_password
-      - DB_NAME=isptransfer
+      - DB_NAME=ispdown
       - JWT_SECRET=sua_chave_secreta_super_segura_aqui
       - UPLOAD_DIR=/app/uploads
     volumes:
@@ -32,8 +32,8 @@ services:
     restart: always
 
   frontend:
-    image: xingubit/isptransfer-frontend:latest
-    container_name: isptransfer-frontend
+    image: xingubit/ispdown-frontend:latest
+    container_name: ispdown-frontend
     ports:
       - "80:80"
     depends_on:

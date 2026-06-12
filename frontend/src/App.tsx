@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <div className="app-container">
         <header className="app-header">
-          <h1>ISP Transfer</h1>
+          <h1>ispDown</h1>
         </header>
         <main className="app-main">
           <Routes>

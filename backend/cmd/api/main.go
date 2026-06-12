@@ -4,9 +4,9 @@ import (
 	"log"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/ruyxingubit/isptransfer/internal/config"
-	"github.com/ruyxingubit/isptransfer/internal/routes"
-	"github.com/ruyxingubit/isptransfer/internal/services"
+	"github.com/ruyxingubit/ispdown/internal/config"
+	"github.com/ruyxingubit/ispdown/internal/routes"
+	"github.com/ruyxingubit/ispdown/internal/services"
 )
 
 func main() {
