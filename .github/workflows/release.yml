@@ -26,39 +26,37 @@ jobs:
 
       - name: Run Semantic Release
         id: semantic
+        uses: cycjimmy/semantic-release-action@v4
+        with:
+          extra_plugins: |
+            @semantic-release/changelog
+            @semantic-release/git
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npx semantic-release > release.log || true
-          cat release.log
-          
-          # Extract version from output if a release was published
-          VERSION=$(grep -oP 'Published release \K[0-9]+\.[0-9]+\.[0-9]+' release.log || echo "")
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Login to DockerHub
-        if: steps.semantic.outputs.version != ''
+        if: steps.semantic.outputs.new_release_published == 'true'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and Push Backend Image
-        if: steps.semantic.outputs.version != ''
+        if: steps.semantic.outputs.new_release_published == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./backend
           push: true
           tags: |
             xingubit/isptransfer-backend:latest
-            xingubit/isptransfer-backend:${{ steps.semantic.outputs.version }}
+            xingubit/isptransfer-backend:${{ steps.semantic.outputs.new_release_version }}
 
       - name: Build and Push Frontend Image
-        if: steps.semantic.outputs.version != ''
+        if: steps.semantic.outputs.new_release_published == 'true'
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
           push: true
           tags: |
             xingubit/isptransfer-frontend:latest
-            xingubit/isptransfer-frontend:${{ steps.semantic.outputs.version }}
+            xingubit/isptransfer-frontend:${{ steps.semantic.outputs.new_release_version }}
