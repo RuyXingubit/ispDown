@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/RuyXingubit/ispDown/compare/v1.0.0...v1.1.0) (2026-06-12)
+
+
+### Features
+
+* simplifica deploy para provedores com caddy e ssl automatico ([4d8883e](https://github.com/RuyXingubit/ispDown/commit/4d8883e50043ae95c5114e81f18495e64740ae4e))
+
 # 1.0.0 (2026-06-12)
 
 
