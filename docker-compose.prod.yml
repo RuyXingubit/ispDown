@@ -45,7 +45,7 @@ services:
       - "443:443"
     environment:
       - DOMAIN=${DOMAIN}
-    command: sh -c 'echo "$$DOMAIN { reverse_proxy /api/* backend:8080; reverse_proxy * frontend:80 }" > /etc/caddy/Caddyfile && caddy run --config /etc/caddy/Caddyfile'
+    command: sh -c 'printf "%s {\n  reverse_proxy /api/* backend:8080\n  reverse_proxy * frontend:80\n}\n" "$$DOMAIN" > /etc/caddy/Caddyfile && caddy run --config /etc/caddy/Caddyfile'
     volumes:
       - caddy_data:/data
       - caddy_config:/config
