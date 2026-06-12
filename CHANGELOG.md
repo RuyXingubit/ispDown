@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/RuyXingubit/ispDown/compare/v1.1.2...v1.1.3) (2026-06-12)
+
+
+### Bug Fixes
+
+* corrige a sintaxe do Caddyfile no docker-compose ([ae54158](https://github.com/RuyXingubit/ispDown/commit/ae54158dbe597242d584b260acae47aba4063866))
+
 ## [1.1.2](https://github.com/RuyXingubit/ispDown/compare/v1.1.1...v1.1.2) (2026-06-12)
 
 
