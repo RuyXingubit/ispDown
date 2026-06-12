@@ -1,4 +1,4 @@
-module github.com/ruyxingubit/isptransfer
+module github.com/ruyxingubit/ispdown
 
 go 1.26.2
 
