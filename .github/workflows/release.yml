@@ -50,8 +50,8 @@ jobs:
           context: ./backend
           push: true
           tags: |
-            xingubit/isptransfer-backend:latest
-            xingubit/isptransfer-backend:${{ steps.semantic.outputs.new_release_version }}
+            xingubit/ispdown-backend:latest
+            xingubit/ispdown-backend:${{ steps.semantic.outputs.new_release_version }}
 
       - name: Build and Push Frontend Image
         if: steps.semantic.outputs.new_release_published == 'true'
@@ -60,5 +60,5 @@ jobs:
           context: ./frontend
           push: true
           tags: |
-            xingubit/isptransfer-frontend:latest
-            xingubit/isptransfer-frontend:${{ steps.semantic.outputs.new_release_version }}
+            xingubit/ispdown-frontend:latest
+            xingubit/ispdown-frontend:${{ steps.semantic.outputs.new_release_version }}
