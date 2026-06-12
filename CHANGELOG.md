@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/RuyXingubit/ispDown/compare/v1.1.0...v1.1.1) (2026-06-12)
+
+
+### Bug Fixes
+
+* corrige nome das imagens docker no github actions ([504221b](https://github.com/RuyXingubit/ispDown/commit/504221b9c31291766ed1047eb26d2452766cfbe1))
+
 # [1.1.0](https://github.com/RuyXingubit/ispDown/compare/v1.0.0...v1.1.0) (2026-06-12)
 
 
