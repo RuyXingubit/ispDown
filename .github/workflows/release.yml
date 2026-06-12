@@ -1,0 +1,64 @@
+name: Release and Publish Docker Images
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Semantic Release & Docker Push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Semantic Release
+        id: semantic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npx semantic-release > release.log || true
+          cat release.log
+          
+          # Extract version from output if a release was published
+          VERSION=$(grep -oP 'Published release \K[0-9]+\.[0-9]+\.[0-9]+' release.log || echo "")
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Login to DockerHub
+        if: steps.semantic.outputs.version != ''
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Backend Image
+        if: steps.semantic.outputs.version != ''
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            xingubit/isptransfer-backend:latest
+            xingubit/isptransfer-backend:${{ steps.semantic.outputs.version }}
+
+      - name: Build and Push Frontend Image
+        if: steps.semantic.outputs.version != ''
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            xingubit/isptransfer-frontend:latest
+            xingubit/isptransfer-frontend:${{ steps.semantic.outputs.version }}

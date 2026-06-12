@@ -1,0 +1,13 @@
+{
+  "name": "isptransfer",
+  "version": "0.0.0-development",
+  "private": true,
+  "scripts": {
+    "release": "semantic-release"
+  },
+  "devDependencies": {
+    "semantic-release": "^23.0.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/changelog": "^6.0.3"
+  }
+}

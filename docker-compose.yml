@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: isptransfer-db
+    environment:
+      POSTGRES_USER: isp_user
+      POSTGRES_PASSWORD: isp_password
+      POSTGRES_DB: isptransfer
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: always
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: isptransfer-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=isp_user
+      - DB_PASSWORD=isp_password
+      - DB_NAME=isptransfer
+      - JWT_SECRET=sua_chave_secreta_super_segura
+      # Pasta dentro do container onde os arquivos serão salvos
+      - UPLOAD_DIR=/app/uploads
+    volumes:
+      # Mapeamento da pasta padrão no host para dentro do container
+      - /var/isp-transfer/uploads:/app/uploads
+    depends_on:
+      - db
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: isptransfer-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  db_data:
