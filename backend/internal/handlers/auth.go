@@ -40,7 +40,9 @@ func AdminLogin(c *fiber.Ctx) error {
 		// Mock: Se o banco estiver vazio e for o admin inicial
 		if req.Username == "admin" && req.Password == "admin" {
 			provider = models.Provider{ID: 1, Username: "admin", Password: utils.HashString("admin"), MustChangePassword: true}
-			config.DB.Create(&provider)
+			if err := config.DB.Create(&provider).Error; err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Erro crítico ao criar admin"})
+			}
 		} else {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Usuário ou senha incorretos"})
 		}

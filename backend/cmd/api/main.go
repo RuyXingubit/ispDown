@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/ruyxingubit/ispdown/internal/config"
+	"github.com/ruyxingubit/ispdown/internal/models"
 	"github.com/ruyxingubit/ispdown/internal/routes"
 	"github.com/ruyxingubit/ispdown/internal/services"
 )
@@ -15,6 +16,13 @@ func main() {
 
 	// Inicializa o banco de dados
 	config.ConnectDB(cfg)
+
+	// Cria/Atualiza as tabelas automaticamente
+	if config.DB != nil {
+		if err := models.AutoMigrate(config.DB); err != nil {
+			log.Fatal("Falha ao rodar migrations: ", err)
+		}
+	}
 
 	// Inicializa Fiber
 	app := fiber.New(fiber.Config{
