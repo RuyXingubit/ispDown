@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/RuyXingubit/ispDown/compare/v1.4.0...v1.4.1) (2026-06-13)
+
+
+### Bug Fixes
+
+* **security:** remove credencial hardcoded, protege swagger e valida tamanho de upload ([c7067da](https://github.com/RuyXingubit/ispDown/commit/c7067da7c886b166f8f916a0a1decb9b866f0450))
+
 # [1.4.0](https://github.com/RuyXingubit/ispDown/compare/v1.3.2...v1.4.0) (2026-06-13)
 
 
