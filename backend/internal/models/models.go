@@ -10,8 +10,9 @@ type Provider struct {
 	ID        uint      `gorm:"primaryKey"`
 	Username  string    `gorm:"uniqueIndex;not null"`
 	Password  string    `gorm:"not null"` // Senha hasheada
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	MustChangePassword bool      `gorm:"default:true"`
+	CreatedAt          time.Time
+	UpdatedAt          time.Time
 }
 
 type Client struct {

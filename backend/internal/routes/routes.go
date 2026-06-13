@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/ruyxingubit/ispdown/internal/handlers"
+	"github.com/ruyxingubit/ispdown/internal/middleware"
 )
 
 func SetupRoutes(app *fiber.App) {
@@ -16,7 +17,12 @@ func SetupRoutes(app *fiber.App) {
 	// Rotas do Admin/Provider
 	admin := api.Group("/admin")
 	admin.Post("/login", handlers.AdminLogin)
-	// Futuramente: rotas protegidas por middleware JWT para /admin/clients
+	
+	// Rotas protegidas do Admin
+	adminProtected := admin.Group("/", middleware.AdminAuth)
+	adminProtected.Post("/change-password", handlers.ChangePassword)
+	adminProtected.Get("/clients", handlers.ListClients)
+	adminProtected.Post("/clients", handlers.CreateClient)
 
 	// Rotas do Cliente
 	client := api.Group("/client")

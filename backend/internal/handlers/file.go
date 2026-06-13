@@ -133,12 +133,4 @@ func DownloadFile(c *fiber.Ctx) error {
 	return c.SendFile(file.DiskPath)
 }
 
-// --- CLIENT HANDLERS MOCK (Admin Side) ---
-
-func CreateClient(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{"message": "Create Client Not Implemented"})
-}
-
-func ListClients(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{"message": "List Clients Not Implemented"})
-}
+// Fim do arquivo

@@ -1,22 +1,14 @@
 package handlers
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/ruyxingubit/ispdown/internal/config"
 	"github.com/ruyxingubit/ispdown/internal/models"
+	"github.com/ruyxingubit/ispdown/internal/utils"
 )
-
-// Helper para fazer hash do PIN ou Senha (simples para este MVP)
-func hashString(s string) string {
-	h := sha256.New()
-	h.Write([]byte(s))
-	return hex.EncodeToString(h.Sum(nil))
-}
 
 // Helper para gerar o token JWT
 func generateToken(id uint, isProvider bool) (string, error) {
@@ -47,7 +39,7 @@ func AdminLogin(c *fiber.Ctx) error {
 	if err := config.DB.Where("username = ?", req.Username).First(&provider).Error; err != nil {
 		// Mock: Se o banco estiver vazio e for o admin inicial
 		if req.Username == "admin" && req.Password == "admin" {
-			provider = models.Provider{ID: 1, Username: "admin", Password: hashString("admin")}
+			provider = models.Provider{ID: 1, Username: "admin", Password: utils.HashString("admin"), MustChangePassword: true}
 			config.DB.Create(&provider)
 		} else {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Usuário ou senha incorretos"})
@@ -55,7 +47,7 @@ func AdminLogin(c *fiber.Ctx) error {
 	}
 
 	// Valida senha hasheada
-	if provider.Password != hashString(req.Password) {
+	if provider.Password != utils.HashString(req.Password) {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Usuário ou senha incorretos"})
 	}
 
@@ -67,10 +59,39 @@ func AdminLogin(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"token": token,
 		"user": fiber.Map{
-			"id":       provider.ID,
-			"username": provider.Username,
+			"id":                   provider.ID,
+			"username":             provider.Username,
+			"must_change_password": provider.MustChangePassword,
 		},
 	})
+}
+
+func ChangePassword(c *fiber.Ctx) error {
+	type ChangePasswordReq struct {
+		NewPassword string `json:"new_password"`
+	}
+
+	var req ChangePasswordReq
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Requisição inválida"})
+	}
+
+	// O ID do provider vem do token JWT
+	providerID := c.Locals("providerID").(float64)
+
+	var provider models.Provider
+	if err := config.DB.First(&provider, uint(providerID)).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Provedor não encontrado"})
+	}
+
+	provider.Password = utils.HashString(req.NewPassword)
+	provider.MustChangePassword = false
+
+	if err := config.DB.Save(&provider).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Erro ao atualizar senha"})
+	}
+
+	return c.JSON(fiber.Map{"message": "Senha atualizada com sucesso!"})
 }
 
 func ClientLogin(c *fiber.Ctx) error {
@@ -89,7 +110,7 @@ func ClientLogin(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "CPF não cadastrado ou inativo"})
 	}
 
-	if client.PIN != hashString(req.PIN) {
+	if client.PIN != utils.HashString(req.PIN) {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "PIN incorreto"})
 	}
 
