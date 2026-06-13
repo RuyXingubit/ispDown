@@ -65,6 +65,11 @@ func CreateClient(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Nome, CPF e PIN são obrigatórios"})
 	}
 
+	// Validação matemática do CPF
+	if !utils.ValidateCPF(req.CPF) {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "CPF inválido"})
+	}
+
 	client := models.Client{
 		ProviderID: uint(providerID),
 		Name:       req.Name,

@@ -1,6 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import './AdminDashboard.css';
 
+// Validação matemática de CPF (algoritmo da Receita Federal)
+function validateCPF(cpf: string): boolean {
+  const digits = cpf.replace(/\D/g, '');
+  if (digits.length !== 11) return false;
+  if (/^(\d)\1{10}$/.test(digits)) return false; // todos iguais
+
+  const nums = digits.split('').map(Number);
+
+  // Primeiro dígito verificador
+  const sum1 = nums.slice(0, 9).reduce((acc, n, i) => acc + n * (10 - i), 0);
+  const r1 = sum1 % 11;
+  const d1 = r1 < 2 ? 0 : 11 - r1;
+  if (nums[9] !== d1) return false;
+
+  // Segundo dígito verificador
+  const sum2 = nums.slice(0, 10).reduce((acc, n, i) => acc + n * (11 - i), 0);
+  const r2 = sum2 % 11;
+  const d2 = r2 < 2 ? 0 : 11 - r2;
+  return nums[10] === d2;
+}
+
+// Formata CPF: 00000000000 → 000.000.000-00
+function formatCPF(value: string): string {
+  const d = value.replace(/\D/g, '').slice(0, 11);
+  return d
+    .replace(/^(\d{3})(\d)/, '$1.$2')
+    .replace(/^(\d{3}\.\d{3})(\d)/, '$1.$2')
+    .replace(/^(\d{3}\.\d{3}\.\d{3})(\d)/, '$1-$2');
+}
+
 interface Client {
   ID: number;
   Name: string;
@@ -22,6 +52,7 @@ export default function AdminDashboard({ token, onLogout }: Props) {
   const [showModal, setShowModal] = useState(false);
   const [newName, setNewName] = useState('');
   const [newCpf, setNewCpf] = useState('');
+  const [cpfError, setCpfError] = useState('');
   const [newPin, setNewPin] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -50,8 +81,17 @@ export default function AdminDashboard({ token, onLogout }: Props) {
 
   const handleCreateClient = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Valida CPF antes de enviar
+    const rawCpf = newCpf.replace(/\D/g, '');
+    if (!validateCPF(rawCpf)) {
+      setCpfError('CPF inválido. Verifique os dígitos.');
+      return;
+    }
+
     setSaving(true);
     setError('');
+    setCpfError('');
 
     try {
       const res = await fetch('/api/admin/clients', {
@@ -60,7 +100,7 @@ export default function AdminDashboard({ token, onLogout }: Props) {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ name: newName, cpf: newCpf, pin: newPin })
+        body: JSON.stringify({ name: newName, cpf: rawCpf, pin: newPin })
       });
 
       if (!res.ok) {
@@ -71,6 +111,7 @@ export default function AdminDashboard({ token, onLogout }: Props) {
       setShowModal(false);
       setNewName('');
       setNewCpf('');
+      setCpfError('');
       setNewPin('');
       fetchClients();
     } catch (err: any) {
@@ -229,8 +270,27 @@ export default function AdminDashboard({ token, onLogout }: Props) {
                 <input required type="text" className="input" value={newName} onChange={e => setNewName(e.target.value)} />
               </div>
               <div className="input-group">
-                <label>CPF (apenas números)</label>
-                <input required type="text" className="input" inputMode="numeric" maxLength={11} value={newCpf} onChange={e => setNewCpf(e.target.value.replace(/\D/g, ''))} />
+                <label>CPF</label>
+                <input
+                  required
+                  type="text"
+                  className={`input ${cpfError ? 'input-error' : newCpf.replace(/\D/g,'').length === 11 && !cpfError ? 'input-valid' : ''}`}
+                  inputMode="numeric"
+                  placeholder="000.000.000-00"
+                  maxLength={14}
+                  value={newCpf}
+                  onChange={e => {
+                    const formatted = formatCPF(e.target.value);
+                    setNewCpf(formatted);
+                    const raw = formatted.replace(/\D/g, '');
+                    if (raw.length === 11) {
+                      setCpfError(validateCPF(raw) ? '' : 'CPF inválido. Verifique os dígitos.');
+                    } else {
+                      setCpfError('');
+                    }
+                  }}
+                />
+                {cpfError && <span className="field-error">{cpfError}</span>}
               </div>
               <div className="input-group">
                 <label>PIN (4 dígitos)</label>

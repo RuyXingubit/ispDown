@@ -1,4 +1,25 @@
 /* ===== AdminDashboard Layout ===== */
+
+/* Campo com erro */
+.input-error {
+  border-color: #f44336 !important;
+  box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.15) !important;
+}
+
+/* Campo válido */
+.input-valid {
+  border-color: #4caf50 !important;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15) !important;
+}
+
+/* Mensagem de erro inline abaixo do campo */
+.field-error {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: #f44336;
+}
+
 .admin-page {
   width: 100%;
   max-width: 900px;
