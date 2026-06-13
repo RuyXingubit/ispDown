@@ -50,14 +50,30 @@ Como os arquivos de transferência são muito grandes, é crucial que eles não 
 2. **Copie os arquivos do projeto para a VPS**:
    Transfira a pasta `ispDown` para a sua VPS (usando `scp` ou clonando via git).
 
-3. **Inicie o sistema**:
-   Dentro da pasta `ispDown`, rode o seguinte comando:
-   
+3. **Configure o arquivo `.env`**:
+   Copie o arquivo de exemplo e preencha com as suas credenciais:
+
    ```bash
-   sudo docker-compose up -d --build
+   cp .env.example .env
+   nano .env
    ```
 
-O sistema subirá o Banco de Dados, o Backend e o Frontend. 
-- O Frontend ficará acessível na porta `80` (http://seu-ip).
-- O Backend ficará acessível na porta `8080`.
+4. **Inicie o sistema**:
+   Dentro da pasta `ispDown`, rode o seguinte comando:
+
+   ```bash
+   docker compose -f docker-compose.prod.yml pull && \
+   docker compose -f docker-compose.prod.yml up -d
+   ```
+
+O sistema subirá o Banco de Dados, o Backend, o Frontend e o Caddy (proxy reverso com SSL automático).
+- A aplicação ficará acessível em `https://<seu-domínio>`.
 - Os arquivos enviados pelos usuários serão gravados fisicamente em `/var/isp-transfer/uploads`, garantindo que o seu disco OS fique livre.
+
+---
+
+## 3. Comandos do Dia a Dia
+
+Para atualizar, ver logs, fazer backup do banco e mais, consulte:
+
+📄 [`docker/COMANDOS.md`](../docker/COMANDOS.md)
