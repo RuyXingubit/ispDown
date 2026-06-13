@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/RuyXingubit/ispDown/compare/v1.3.1...v1.3.2) (2026-06-13)
+
+
+### Bug Fixes
+
+* retira rota publica do grupo restrito /files para evitar bloqueio do auth ([bb1a610](https://github.com/RuyXingubit/ispDown/commit/bb1a610e2f49d622556eda37c75ce1e97f120bbc))
+
 ## [1.3.1](https://github.com/RuyXingubit/ispDown/compare/v1.3.0...v1.3.1) (2026-06-13)
 
 
