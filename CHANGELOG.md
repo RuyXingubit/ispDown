@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/RuyXingubit/ispDown/compare/v1.3.0...v1.3.1) (2026-06-13)
+
+
+### Bug Fixes
+
+* corrige path da rota publica de download ([3e01dce](https://github.com/RuyXingubit/ispDown/commit/3e01dce18efe1b723bd01b4453ade86198a7be01))
+
 # [1.3.0](https://github.com/RuyXingubit/ispDown/compare/v1.2.1...v1.3.0) (2026-06-13)
 
 
