@@ -129,6 +129,12 @@ func DownloadFile(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Arquivo não encontrado ou já expirado"})
 	}
 
+	// Verifica se o cliente dono do arquivo está ativo (suspensão bloqueia downloads)
+	var client models.Client
+	if err := config.DB.First(&client, file.ClientID).Error; err != nil || !client.IsActive {
+		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{"error": "Este link está temporariamente indisponível"})
+	}
+
 	// Verifica se o arquivo físico existe
 	if _, err := os.Stat(file.DiskPath); os.IsNotExist(err) {
 		// Inconsistência: existe no banco mas não no disco
