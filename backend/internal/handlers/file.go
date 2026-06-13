@@ -57,6 +57,16 @@ func UploadComplete(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Requisição inválida"})
 	}
 
+	// Validação server-side: limite de chunks e tamanho total (máx 30 GB)
+	const maxTotalSize int64 = 30 * 1024 * 1024 * 1024 // 30 GB em bytes
+	const maxChunks = 10_000
+	if req.TotalChunks <= 0 || req.TotalChunks > maxChunks {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Número de chunks inválido (máximo: 10.000)"})
+	}
+	if req.TotalSize <= 0 || req.TotalSize > maxTotalSize {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Tamanho do arquivo inválido (máximo: 30 GB)"})
+	}
+
 	cfg := config.LoadConfig()
 	tempDir := filepath.Join(cfg.UploadDir, "tmp", fmt.Sprintf("%d_%s", int(clientID), req.FileIdentifier))
 	finalFileDir := filepath.Join(cfg.UploadDir, "files")

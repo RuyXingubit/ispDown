@@ -49,14 +49,17 @@ func AdminLogin(c *fiber.Ctx) error {
 	var provider models.Provider
 	// Busca provedor
 	if err := config.DB.Where("username = ?", req.Username).First(&provider).Error; err != nil {
-		// Mock: Se o banco estiver vazio e for o admin inicial
-		if req.Username == "admin" && req.Password == "admin" {
-			provider = models.Provider{ID: 1, Username: "admin", Password: utils.HashString("admin"), MustChangePassword: true}
-			if err := config.DB.Create(&provider).Error; err != nil {
-				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Erro crítico ao criar admin"})
-			}
-		} else {
+		// Se o banco estiver vazio, cria o admin inicial a partir das variáveis de ambiente
+		cfgAdmin := config.LoadConfig()
+		if cfgAdmin.AdminUsername == "" || cfgAdmin.AdminPassword == "" {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Credenciais do admin não configuradas no servidor"})
+		}
+		if req.Username != cfgAdmin.AdminUsername || utils.HashString(req.Password) != utils.HashString(cfgAdmin.AdminPassword) {
 			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"error": "Usuário ou senha incorretos"})
+		}
+		provider = models.Provider{ID: 1, Username: cfgAdmin.AdminUsername, Password: utils.HashString(cfgAdmin.AdminPassword), MustChangePassword: false}
+		if err := config.DB.Create(&provider).Error; err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Erro crítico ao criar admin"})
 		}
 	}
 

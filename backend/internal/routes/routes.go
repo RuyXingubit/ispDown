@@ -15,8 +15,8 @@ func SetupRoutes(app *fiber.App) {
 		return c.SendString("OK")
 	})
 
-	// Rota do Swagger
-	api.Get("/docs/*", swagger.HandlerDefault)
+	// Rota do Swagger (protegida — apenas admins autenticados)
+	api.Get("/docs/*", middleware.AdminAuth, swagger.HandlerDefault)
 
 	// Rotas do Admin/Provider
 	admin := api.Group("/admin")
