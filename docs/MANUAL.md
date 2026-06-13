@@ -76,4 +76,4 @@ O sistema subirá o Banco de Dados, o Backend, o Frontend e o Caddy (proxy rever
 
 Para atualizar, ver logs, fazer backup do banco e mais, consulte:
 
-📄 [`docker/COMANDOS.md`](../docker/COMANDOS.md)
+📄 [`docs/COMANDOS.md`](./COMANDOS.md)
