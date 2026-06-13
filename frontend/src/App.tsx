@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import AdminPage from './pages/AdminPage';
-import UploadPage from './pages/UploadPage';
+import ClientDashboard from './pages/ClientDashboard';
 import DownloadPage from './pages/DownloadPage';
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
             <Route path="/" element={<LoginPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/admin" element={<AdminPage />} />
-            <Route path="/upload" element={<UploadPage />} />
+            <Route path="/dashboard" element={<ClientDashboard />} />
             <Route path="/download/:fileId" element={<DownloadPage />} />
           </Routes>
         </main>

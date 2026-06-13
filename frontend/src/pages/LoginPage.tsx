@@ -6,10 +6,33 @@ export default function LoginPage() {
   const [pin, setPin] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simular login bem sucedido
-    navigate('/upload');
+    setLoading(true);
+    setError('');
+
+    try {
+      const res = await fetch('/api/client/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cpf: cpf.replace(/\D/g, ''), pin }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Erro ao acessar. Verifique CPF e PIN.');
+      }
+
+      localStorage.setItem('clientToken', data.token);
+      navigate('/dashboard');
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,7 +60,10 @@ export default function LoginPage() {
             required 
           />
         </div>
-        <button type="submit" className="btn">Entrar</button>
+        {error && <p style={{ color: 'var(--danger-color)', marginBottom: '1rem', textAlign: 'center', fontSize: '0.9rem' }}>{error}</p>}
+        <button type="submit" className="btn btn-block" disabled={loading}>
+          {loading ? 'Acessando...' : 'Entrar'}
+        </button>
       </form>
     </div>
   );

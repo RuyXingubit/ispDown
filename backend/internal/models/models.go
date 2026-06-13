@@ -30,6 +30,7 @@ type File struct {
 	ID           string    `gorm:"primaryKey;type:uuid;default:gen_random_uuid()"`
 	ClientID     uint      `gorm:"not null"`
 	OriginalName string    `gorm:"not null"`
+	AccessLink   string    `gorm:"uniqueIndex;not null"`
 	DiskPath     string    `gorm:"not null"`
 	Size         int64     `gorm:"not null"`
 	CreatedAt    time.Time

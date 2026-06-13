@@ -28,9 +28,14 @@ func SetupRoutes(app *fiber.App) {
 	client := api.Group("/client")
 	client.Post("/login", handlers.ClientLogin)
 
-	// Rotas de Upload/Download (a serem implementadas)
-	files := api.Group("/files")
-	files.Post("/upload", handlers.UploadChunk)
-	files.Post("/upload/complete", handlers.UploadComplete)
-	files.Get("/download/:id", handlers.DownloadFile)
+	// Rotas protegidas do Cliente (Upload, Listagem)
+	clientProtected := api.Group("/files", middleware.ClientAuth)
+	clientProtected.Get("/", handlers.ListFiles)
+	clientProtected.Post("/upload", handlers.UploadChunk)
+	clientProtected.Post("/upload/complete", handlers.UploadComplete)
+	clientProtected.Delete("/:id", handlers.DeleteFile)
+	clientProtected.Post("/:id/regenerate-link", handlers.RegenerateLink)
+
+	// Rota pública de Download
+	api.Get("/download/:access_link", handlers.DownloadFile)
 }

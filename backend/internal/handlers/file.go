@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 	"github.com/ruyxingubit/ispdown/internal/config"
 	"github.com/ruyxingubit/ispdown/internal/models"
 )
@@ -15,10 +15,7 @@ import (
 // --- FILE HANDLERS ---
 
 func UploadChunk(c *fiber.Ctx) error {
-	// Requer JWT Token do Cliente
-	userToken := c.Locals("user").(*jwt.Token)
-	claims := userToken.Claims.(jwt.MapClaims)
-	clientID := uint(claims["id"].(float64))
+	clientID := c.Locals("clientID").(float64)
 
 	// Pegar os dados do chunk
 	fileIdentifier := c.FormValue("fileIdentifier") // Ex: "uuid-do-frontend"
@@ -31,7 +28,7 @@ func UploadChunk(c *fiber.Ctx) error {
 
 	// Definir pasta e arquivo temporário para montagem
 	cfg := config.LoadConfig()
-	tempDir := filepath.Join(cfg.UploadDir, "tmp", fmt.Sprintf("%d_%s", clientID, fileIdentifier))
+	tempDir := filepath.Join(cfg.UploadDir, "tmp", fmt.Sprintf("%d_%s", int(clientID), fileIdentifier))
 	
 	// Cria pasta tmp se não existir
 	os.MkdirAll(tempDir, os.ModePerm)
@@ -46,9 +43,7 @@ func UploadChunk(c *fiber.Ctx) error {
 }
 
 func UploadComplete(c *fiber.Ctx) error {
-	userToken := c.Locals("user").(*jwt.Token)
-	claims := userToken.Claims.(jwt.MapClaims)
-	clientID := uint(claims["id"].(float64))
+	clientID := c.Locals("clientID").(float64)
 
 	type CompleteRequest struct {
 		FileIdentifier string `json:"fileIdentifier"`
@@ -63,16 +58,19 @@ func UploadComplete(c *fiber.Ctx) error {
 	}
 
 	cfg := config.LoadConfig()
-	tempDir := filepath.Join(cfg.UploadDir, "tmp", fmt.Sprintf("%d_%s", clientID, req.FileIdentifier))
+	tempDir := filepath.Join(cfg.UploadDir, "tmp", fmt.Sprintf("%d_%s", int(clientID), req.FileIdentifier))
 	finalFileDir := filepath.Join(cfg.UploadDir, "files")
 	os.MkdirAll(finalFileDir, os.ModePerm)
 
-	// O nome no disco vai ser o UUID do banco de dados (que criaremos agora)
+	// Gera o link de acesso único (slug)
+	accessLink := uuid.New().String()
+
 	newFile := models.File{
-		ClientID:     clientID,
+		ClientID:     uint(clientID),
 		OriginalName: req.OriginalName,
 		Size:         req.TotalSize,
-		DiskPath:     "", // Vamos preencher após criar e gerar o UUID
+		AccessLink:   accessLink,
+		DiskPath:     "", 
 	}
 	
 	if err := config.DB.Create(&newFile).Error; err != nil {
@@ -109,14 +107,15 @@ func UploadComplete(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Upload completo com sucesso",
 		"fileId":  newFile.ID,
+		"accessLink": newFile.AccessLink,
 	})
 }
 
 func DownloadFile(c *fiber.Ctx) error {
-	fileID := c.Params("id")
+	accessLink := c.Params("access_link")
 
 	var file models.File
-	if err := config.DB.Where("id = ?", fileID).First(&file).Error; err != nil {
+	if err := config.DB.Where("access_link = ?", accessLink).First(&file).Error; err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Arquivo não encontrado ou já expirado"})
 	}
 
@@ -127,10 +126,56 @@ func DownloadFile(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Arquivo físico não encontrado no disco do servidor"})
 	}
 
-	// Opcional: registrar logs de quem baixou, quantidade de downloads, etc.
-
 	c.Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", file.OriginalName))
 	return c.SendFile(file.DiskPath)
 }
 
-// Fim do arquivo
+func ListFiles(c *fiber.Ctx) error {
+	clientID := c.Locals("clientID").(float64)
+
+	var files []models.File
+	if err := config.DB.Where("client_id = ?", uint(clientID)).Find(&files).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Erro ao buscar arquivos"})
+	}
+
+	return c.JSON(files)
+}
+
+func DeleteFile(c *fiber.Ctx) error {
+	clientID := c.Locals("clientID").(float64)
+	fileID := c.Params("id")
+
+	var file models.File
+	if err := config.DB.Where("id = ? AND client_id = ?", fileID, uint(clientID)).First(&file).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Arquivo não encontrado"})
+	}
+
+	// Remove do disco
+	if file.DiskPath != "" {
+		os.Remove(file.DiskPath)
+	}
+
+	// Remove do banco
+	config.DB.Delete(&file)
+
+	return c.JSON(fiber.Map{"message": "Arquivo excluído com sucesso"})
+}
+
+func RegenerateLink(c *fiber.Ctx) error {
+	clientID := c.Locals("clientID").(float64)
+	fileID := c.Params("id")
+
+	var file models.File
+	if err := config.DB.Where("id = ? AND client_id = ?", fileID, uint(clientID)).First(&file).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Arquivo não encontrado"})
+	}
+
+	// Gera novo link
+	file.AccessLink = uuid.New().String()
+	config.DB.Save(&file)
+
+	return c.JSON(fiber.Map{
+		"message": "Link regenerado com sucesso",
+		"accessLink": file.AccessLink,
+	})
+}
