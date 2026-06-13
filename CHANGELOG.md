@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/RuyXingubit/ispDown/compare/v1.2.0...v1.2.1) (2026-06-13)
+
+
+### Bug Fixes
+
+* inicializa banco de dados com automigrate para resolver provider not found ([2f556f4](https://github.com/RuyXingubit/ispDown/commit/2f556f4c762c3700df0ad61b5de3e652f2bfcc21))
+
 # [1.2.0](https://github.com/RuyXingubit/ispDown/compare/v1.1.4...v1.2.0) (2026-06-13)
 
 
