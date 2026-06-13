@@ -37,5 +37,5 @@ func SetupRoutes(app *fiber.App) {
 	clientProtected.Post("/:id/regenerate-link", handlers.RegenerateLink)
 
 	// Rota pública de Download
-	api.Get("/files/download/:access_link", handlers.DownloadFile)
+	api.Get("/download/:access_link", handlers.DownloadFile)
 }

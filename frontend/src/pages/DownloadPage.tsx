@@ -4,7 +4,7 @@ export default function DownloadPage() {
   const { fileId } = useParams();
 
   const handleDownload = () => {
-    window.location.href = `/api/files/download/${fileId}`;
+    window.location.href = `/api/download/${fileId}`;
   };
 
   return (
