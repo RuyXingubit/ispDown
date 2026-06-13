@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/swagger"
 	"github.com/ruyxingubit/ispdown/internal/handlers"
 	"github.com/ruyxingubit/ispdown/internal/middleware"
 )
@@ -14,6 +15,9 @@ func SetupRoutes(app *fiber.App) {
 		return c.SendString("OK")
 	})
 
+	// Rota do Swagger
+	api.Get("/docs/*", swagger.HandlerDefault)
+
 	// Rotas do Admin/Provider
 	admin := api.Group("/admin")
 	admin.Post("/login", handlers.AdminLogin)
@@ -23,6 +27,8 @@ func SetupRoutes(app *fiber.App) {
 	adminProtected.Post("/change-password", handlers.ChangePassword)
 	adminProtected.Get("/clients", handlers.ListClients)
 	adminProtected.Post("/clients", handlers.CreateClient)
+	adminProtected.Put("/clients/:id/status", handlers.UpdateClientStatus)
+	adminProtected.Delete("/clients/:id", handlers.DeleteClient)
 
 	// Rotas do Cliente
 	client := api.Group("/client")

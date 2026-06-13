@@ -8,8 +8,26 @@ import (
 	"github.com/ruyxingubit/ispdown/internal/models"
 	"github.com/ruyxingubit/ispdown/internal/routes"
 	"github.com/ruyxingubit/ispdown/internal/services"
+	_ "github.com/ruyxingubit/ispdown/docs" // Necessário para o Swagger
 )
 
+// @title ISPDown API
+// @version 1.0
+// @description API para gestão de arquivos e integração com ERP de provedores de internet.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name Suporte ISPDown
+// @contact.email suporte@ispdown.com
+
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
+
+// @host ispdown.proserv.net.br
+// @BasePath /api
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func main() {
 	// Carrega configuração
 	cfg := config.LoadConfig()

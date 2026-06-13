@@ -23,6 +23,18 @@ func generateToken(id uint, isProvider bool) (string, error) {
 	return token.SignedString([]byte(cfg.JWTSecret))
 }
 
+// AdminLogin godoc
+// @Summary      Realiza login de administrador
+// @Description  Retorna token JWT de acesso ao painel do provedor ou ERP.
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        credentials  body      map[string]string  true  "Credenciais (username, password)"
+// @Success      200          {object}  map[string]interface{}
+// @Failure      400          {object}  map[string]string
+// @Failure      401          {object}  map[string]string
+// @Failure      500          {object}  map[string]string
+// @Router       /admin/login [post]
 func AdminLogin(c *fiber.Ctx) error {
 	type LoginRequest struct {
 		Username string `json:"username"`
@@ -68,6 +80,19 @@ func AdminLogin(c *fiber.Ctx) error {
 	})
 }
 
+// ChangePassword godoc
+// @Summary      Altera senha do administrador
+// @Description  Troca a senha do provedor logado.
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Security     BearerAuth
+// @Param        passwords  body      map[string]string  true  "Nova senha (new_password)"
+// @Success      200        {object}  map[string]string
+// @Failure      400        {object}  map[string]string
+// @Failure      404        {object}  map[string]string
+// @Failure      500        {object}  map[string]string
+// @Router       /admin/change-password [post]
 func ChangePassword(c *fiber.Ctx) error {
 	type ChangePasswordReq struct {
 		NewPassword string `json:"new_password"`
