@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/RuyXingubit/ispDown/compare/v1.5.0...v1.5.1) (2026-06-13)
+
+
+### Bug Fixes
+
+* melhora responsividade do painel admin ([742aae5](https://github.com/RuyXingubit/ispDown/commit/742aae5aa334fead0f7b14f9ba8c3c0e51231c54))
+
 # [1.5.0](https://github.com/RuyXingubit/ispDown/compare/v1.4.1...v1.5.0) (2026-06-13)
 
 
