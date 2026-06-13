@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/RuyXingubit/ispDown/compare/v1.4.1...v1.5.0) (2026-06-13)
+
+
+### Features
+
+* adiciona ações de suspender, reativar e excluir clientes no painel admin ([875fd02](https://github.com/RuyXingubit/ispDown/commit/875fd02ca53ef0938a3556e496a8b5e6c8158b7a))
+
 ## [1.4.1](https://github.com/RuyXingubit/ispDown/compare/v1.4.0...v1.4.1) (2026-06-13)
 
 
