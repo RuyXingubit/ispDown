@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/RuyXingubit/ispDown/compare/v1.3.2...v1.4.0) (2026-06-13)
+
+
+### Features
+
+* implementa exclusao e suspensao de clientes e gera documentacao swagger ([c7f0bd8](https://github.com/RuyXingubit/ispDown/commit/c7f0bd8b761ad81574ceb6cc7fb0f0bf6600f5f8))
+
 ## [1.3.2](https://github.com/RuyXingubit/ispDown/compare/v1.3.1...v1.3.2) (2026-06-13)
 
 
