@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/RuyXingubit/ispDown/compare/v1.1.3...v1.1.4) (2026-06-13)
+
+
+### Bug Fixes
+
+* altera hardcode do banco de dados para usar variaveis do .env ([12e9e37](https://github.com/RuyXingubit/ispDown/commit/12e9e37756f8e30005d0472a17f6468c483e67c9))
+
 ## [1.1.3](https://github.com/RuyXingubit/ispDown/compare/v1.1.2...v1.1.3) (2026-06-12)
 
 
