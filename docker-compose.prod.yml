@@ -5,9 +5,9 @@ services:
     image: postgres:15-alpine
     container_name: ispdown-db
     environment:
-      POSTGRES_USER: isp_user
-      POSTGRES_PASSWORD: isp_password
-      POSTGRES_DB: ispdown
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     volumes:
       - db_data:/var/lib/postgresql/data
     restart: always
@@ -17,10 +17,10 @@ services:
     container_name: ispdown-backend
     environment:
       - DB_HOST=db
-      - DB_PORT=5432
-      - DB_USER=isp_user
-      - DB_PASSWORD=isp_password
-      - DB_NAME=ispdown
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
       - JWT_SECRET=${JWT_SECRET}
       - UPLOAD_DIR=/app/uploads
     volumes:
