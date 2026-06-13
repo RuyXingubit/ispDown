@@ -63,7 +63,7 @@ export default function AdminLogin({ onLoginSuccess }: Props) {
             required
           />
         </div>
-        <button type="submit" className="btn" disabled={loading} style={{ width: '100%' }}>
+        <button type="submit" className="btn btn-block" disabled={loading}>
           {loading ? 'Entrando...' : 'Entrar'}
         </button>
       </form>

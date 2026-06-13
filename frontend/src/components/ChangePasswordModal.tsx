@@ -86,7 +86,7 @@ export default function ChangePasswordModal({ token, onSuccess }: Props) {
               required
             />
           </div>
-          <button type="submit" className="btn" disabled={loading} style={{ width: '100%', backgroundColor: '#ff4d4f' }}>
+          <button type="submit" className="btn btn-block btn-danger" disabled={loading}>
             {loading ? 'Salvando...' : 'Salvar Nova Senha'}
           </button>
         </form>

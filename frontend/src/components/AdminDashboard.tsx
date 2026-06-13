@@ -78,11 +78,11 @@ export default function AdminDashboard({ token, onLogout }: Props) {
 
   return (
     <div style={{ padding: '2rem', maxWidth: '1000px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
         <h2>Painel do Provedor</h2>
-        <div>
-          <button className="btn" onClick={() => setShowModal(true)} style={{ marginRight: '1rem' }}>+ Adicionar Cliente</button>
-          <button className="btn" onClick={onLogout} style={{ backgroundColor: '#666' }}>Sair</button>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <button className="btn" onClick={() => setShowModal(true)}>+ Adicionar Cliente</button>
+          <button className="btn btn-secondary" onClick={onLogout}>Sair</button>
         </div>
       </div>
 
@@ -146,8 +146,8 @@ export default function AdminDashboard({ token, onLogout }: Props) {
                 <label style={{ display: 'block', marginBottom: '0.5rem' }}>PIN (4 dígitos)</label>
                 <input required type="password" maxLength={4} className="input" value={newPin} onChange={e => setNewPin(e.target.value.replace(/\D/g, ''))} />
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-                <button type="button" className="btn" style={{ backgroundColor: '#666' }} onClick={() => setShowModal(false)}>Cancelar</button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1.5rem' }}>
+                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancelar</button>
                 <button type="submit" className="btn" disabled={saving}>{saving ? 'Salvando...' : 'Salvar'}</button>
               </div>
             </form>
