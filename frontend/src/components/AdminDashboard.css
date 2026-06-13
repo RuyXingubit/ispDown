@@ -1,0 +1,228 @@
+/* ===== AdminDashboard Layout ===== */
+.admin-page {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.admin-header-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.admin-error {
+  color: #f44336;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: rgba(244, 67, 54, 0.1);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+/* ===== Card container (overrides global max-width) ===== */
+.admin-card {
+  background-color: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.admin-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.admin-empty {
+  color: #888;
+  font-size: 0.95rem;
+}
+
+/* ===== Status badge ===== */
+.status-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-active  { color: #4caf50; }
+.status-inactive { color: #f44336; }
+
+/* ===== Action buttons ===== */
+.action-btn {
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.action-btn:hover { opacity: 0.8; }
+.action-btn:active { opacity: 0.6; }
+
+.action-suspend    { background: rgba(255,152,0,0.15);  color: #ff9800; }
+.action-reactivate { background: rgba(76,175,80,0.15);  color: #4caf50; }
+.action-delete     { background: rgba(244,67,54,0.15);  color: #f44336; }
+
+/* ===== TABLE (medium+ screens) ===== */
+.clients-table-wrapper {
+  display: block;
+  width: 100%;
+  overflow: hidden; /* sem barra de rolagem */
+}
+
+.clients-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.clients-table th,
+.clients-table td {
+  padding: 0.7rem 0.6rem;
+  text-align: left;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clients-table th {
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
+
+.clients-table td {
+  border-bottom: 1px solid rgba(128,128,128,0.1);
+}
+
+.clients-table tr:last-child td { border-bottom: none; }
+
+.clients-table .col-actions {
+  text-align: right;
+  width: 180px;
+}
+
+.row-actions {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: flex-end;
+}
+
+.row-inactive { opacity: 0.55; }
+
+.cpf-cell { font-family: monospace; font-size: 0.9rem; }
+
+/* ===== CARDS (small screens only) ===== */
+.clients-cards { display: none; }
+
+.client-card {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  background: rgba(128,128,128,0.05);
+}
+
+.client-card-inactive { opacity: 0.6; }
+
+.client-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.client-card-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.client-card-cpf {
+  font-family: monospace;
+  font-size: 0.82rem;
+  opacity: 0.65;
+  margin-top: 0.2rem;
+}
+
+.client-card-footer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ===== Switch layout at 600px ===== */
+@media (max-width: 600px) {
+  .admin-page { padding: 1rem 0.75rem; }
+  .admin-title { font-size: 1.15rem; }
+
+  .clients-table-wrapper { display: none; }
+  .clients-cards         { display: block; }
+}
+
+/* ===== Modals ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 999;
+}
+
+.modal-box {
+  max-width: 420px;
+  width: 100%;
+  max-width: min(420px, 100%);
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.modal-title-danger { color: #f44336; }
+
+.modal-warning-text {
+  color: #aaa;
+  font-size: 0.88rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
