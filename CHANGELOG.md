@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/RuyXingubit/ispDown/compare/v1.2.1...v1.3.0) (2026-06-13)
+
+
+### Features
+
+* implementa backend real de upload/download de arquivos, listagem e dashboard do cliente ([480e2b4](https://github.com/RuyXingubit/ispDown/commit/480e2b4f95a63f579a245e7d5d20d83107713056))
+
 ## [1.2.1](https://github.com/RuyXingubit/ispDown/compare/v1.2.0...v1.2.1) (2026-06-13)
 
 
