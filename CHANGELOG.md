@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/RuyXingubit/ispDown/compare/v1.1.4...v1.2.0) (2026-06-13)
+
+
+### Features
+
+* implementa painel do provedor, controle de clientes e troca de senha obrigatoria ([95d2087](https://github.com/RuyXingubit/ispDown/commit/95d2087b96d3168631ee39b91b3e4df49a01474f))
+
 ## [1.1.4](https://github.com/RuyXingubit/ispDown/compare/v1.1.3...v1.1.4) (2026-06-13)
 
 
