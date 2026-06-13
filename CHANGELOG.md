@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/RuyXingubit/ispDown/compare/v1.5.1...v1.6.0) (2026-06-13)
+
+
+### Features
+
+* valida CPF pelo algoritmo da Receita Federal no frontend e backend ([8e19957](https://github.com/RuyXingubit/ispDown/commit/8e199571d1d47ab0075c189440b9027b8dc9ea45))
+
 ## [1.5.1](https://github.com/RuyXingubit/ispDown/compare/v1.5.0...v1.5.1) (2026-06-13)
 
 
